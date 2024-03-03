@@ -34,9 +34,10 @@ namespace ArtworkSharing.Extensions
             services.AddScoped<IArtworkService, ArtworkService>();
             services.AddScoped<IArtistService, ArtistService>();
             services.AddScoped<IArtistPackageService, ArtistPackageService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
             return services;
         }
-
 
         public static void AddConfigException(this IServiceCollection services)
         {

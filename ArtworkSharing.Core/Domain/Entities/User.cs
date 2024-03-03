@@ -1,10 +1,4 @@
 ﻿using ArtworkSharing.Core.Domain.Base;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArtworkSharing.Core.Domain.Entities
 {
@@ -15,11 +9,10 @@ namespace ArtworkSharing.Core.Domain.Entities
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string Phone { get; set; } = null!;
-        public bool Status { get; set; } 
+        public bool Status { get; set; }
 
         public Guid RoleId { get; set; }
 
-       
         public Role Role { get; set; } = null!;
         public ICollection<Follow>? Followers { get; set; }
         public ICollection<Follow>? Followings { get; set; }

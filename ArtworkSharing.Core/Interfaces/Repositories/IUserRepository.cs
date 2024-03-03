@@ -1,4 +1,5 @@
 ﻿using ArtworkSharing.Core.Domain.Entities;
+using ArtworkSharing.Core.ViewModels.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace ArtworkSharing.Core.Interfaces.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
+        void UpdateUser(User u);
     }
 }

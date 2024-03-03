@@ -16,7 +16,7 @@ builder.Services.AddDatabase();
 builder.Services.AddServices();
 builder.Services.AddConfigException();
 var app = builder.Build();
-EnsureMigrate(app);
+//EnsureMigrate(app);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -31,9 +31,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-void EnsureMigrate(WebApplication webApp)
-{
-    using var scope = webApp.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<ArtworkSharingContext>();
-    context.Database.Migrate();
-}
+
+//void EnsureMigrate(WebApplication webApp)
+//{
+//    using var scope = webApp.Services.CreateScope();
+//    var context = scope.ServiceProvider.GetRequiredService<ArtworkSharingContext>();
+//    context.Database.Migrate();
+//}

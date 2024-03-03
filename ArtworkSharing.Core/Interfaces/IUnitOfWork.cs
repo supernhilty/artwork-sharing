@@ -17,7 +17,7 @@ namespace ArtworkSharing.Core.Interfaces
         IArtistRepository ArtistRepository { get; }
         IArtworkServiceRepository ArtworkServiceRepository { get; }
         ICategoryRepository CategoryRepository { get; }
-        ICommentRepository CommentRepository { get; }   
+        ICommentRepository CommentRepository { get; }
         IFollowRepository FollowRepository { get; }
         ILikeRepository LikeRepository { get; }
         IMediaContentRepository MediaContentRepository { get; }
@@ -25,6 +25,7 @@ namespace ArtworkSharing.Core.Interfaces
         IRatingRepository RatingRepository { get; }
         IRefundRequestRepository RefundRequestRepository { get; }
         ITransactionRepository TransactionRepository { get; }
+        IRoleRepository RoleRepository { get; }
 
         /// <summary>
         /// Saves changes to database, previously opening a transaction
