@@ -40,8 +40,8 @@ namespace ArtworkSharing.Service.Services
                     throw new KeyNotFoundException();
                 }
                     
-
-                Package.Name = Package.Name;
+                
+                Package = PackageInput;
 
                 await _unitOfWork.CommitTransaction();
             }
@@ -83,7 +83,7 @@ namespace ArtworkSharing.Service.Services
                 if (Package == null)
                     throw new KeyNotFoundException();
 
-                PackageRepository.DeleteAsync(Package);
+                await PackageRepository.DeleteAsync(Package);
 
                 await _unitOfWork.CommitTransaction();
             }

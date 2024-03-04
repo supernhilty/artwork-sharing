@@ -45,6 +45,12 @@ namespace ArtworkSharing.Extensions
             services.AddScoped<IArtistService, ArtistService>();
             services.AddScoped<IArtistPackageService, ArtistPackageService>();
 
+			services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IPackageService,PackageService>();
+            services.AddScoped<IRefundRequestService, RefundRequestService>();
+            services.AddScoped<IArtworkService, ArtworkService>();
+
+
             services.AddScoped<IRefundRequestService, RefundRequestService>();
             services.AddScoped<IArtworkRequestService, ArtworkRequestService>();
             services.AddScoped<IUserService, UserService>();
@@ -57,6 +63,7 @@ namespace ArtworkSharing.Extensions
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<UserToLoginDTOValidator>();
             services.AddValidatorsFromAssemblyContaining<UserToRegisterDTOValidator>();
+
 
             return services;
         }
