@@ -1,4 +1,6 @@
 ﻿using ArtworkSharing.Core.Domain.Entities;
+using ArtworkSharing.Core.ViewModels.Artworks;
+using ArtworkSharing.Core.ViewModels.Packages;
 using ArtworkSharing.Core.ViewModels.RefundRequests;
 using ArtworkSharing.Core.ViewModels.Transactions;
 using AutoMapper;
@@ -28,6 +30,8 @@ namespace ArtworkSharing.Service.AutoMappings
             CreateMap<Transaction, UpdateTransactionModel>().ReverseMap();
             CreateMap<RefundRequest, RefundRequestViewModel>().ReverseMap();
             CreateMap<RefundRequest, UpdateRefundRequestModel>().ReverseMap();
+            CreateMap<Package, PackageViewModel>().ReverseMap();
+            CreateMap<Artwork,ArtworkViewModel>().ReverseMap();
         }
     }
 }
