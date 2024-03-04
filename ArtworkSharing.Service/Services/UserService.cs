@@ -2,8 +2,12 @@
 using ArtworkSharing.Core.Domain.Entities;
 using ArtworkSharing.Core.Interfaces;
 using ArtworkSharing.Core.Interfaces.Services;
+using ArtworkSharing.Core.ViewModels.User;
 using ArtworkSharing.DAL.Extensions;
 using ArtworkSharing.Service.AutoMappings;
+
+using Microsoft.EntityFrameworkCore;
+
 
 namespace ArtworkSharing.Service.Services
 {
@@ -56,15 +60,12 @@ namespace ArtworkSharing.Service.Services
             }
         }
 
-        public async Task<User> GetUser(Guid userId)
-        {
-            return await _unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == userId);
-        }
+        public async Task<UserViewModel> GetUser(Guid userId)
+            => AutoMapperConfiguration.Mapper.Map<UserViewModel>(
+                await _unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == userId));
 
-        public Task<IList<User>> GetUsers()
-        {
-            return _unitOfWork.UserRepository.GetAllAsync();
-        }
+        public async Task<IList<UserViewModel>> GetUsers()
+            => AutoMapperConfiguration.Mapper.Map<IList<UserViewModel>>(await (_unitOfWork.UserRepository.GetAll().AsQueryable()).ToListAsync());
 
     
 
