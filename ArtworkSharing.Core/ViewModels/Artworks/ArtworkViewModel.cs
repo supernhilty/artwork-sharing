@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ArtworkSharing.Core.ViewModels.Categories;
+using ArtworkSharing.Core.ViewModels.Comments;
+using ArtworkSharing.Core.ViewModels.Likes;
+using ArtworkSharing.Core.ViewModels.MediaContents;
 
 namespace ArtworkSharing.Core.ViewModels.Artworks
 {
@@ -17,10 +21,10 @@ namespace ArtworkSharing.Core.ViewModels.Artworks
         public bool Status { get; set; }
 
         public Artist Artist { get; set; } = null!;
-        public ICollection<MediaContent> MediaContents { get; set; } = null!;
-        public ICollection<Like>? Likes { get; set; }
-        public ICollection<Comment>? Comments { get; set; }
-        public ICollection<Transaction>? Transactions { get; set; }
-        public ICollection<Category>? Categories { get; set; }
+
+        public List<MediaContentViewModel> MediaContents { get; set; } = null!;
+        public List<LikeViewModel>? Likes { get; set; }
+        public List<CommentViewModel>? Comments { get; set; }
+        public List<CategoryViewModel>? Categories { get; set; }
     }
 }

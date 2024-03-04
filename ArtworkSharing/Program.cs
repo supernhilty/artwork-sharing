@@ -28,7 +28,7 @@ builder.Services.AddMvc(options =>
     options.SuppressAsyncSuffixInActionNames = false;
 });
 var app = builder.Build();
-EnsureMigrate(app);
+//EnsureMigrate(app);
 // Configure the HTTP request pipeline.
 //app.UseMiddleware<ExceptionMiddleware>();
 
@@ -45,9 +45,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-void EnsureMigrate(WebApplication webApp)
-{
-    using var scope = webApp.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<ArtworkSharingContext>();
-    context.Database.Migrate();
-}
+
+//void EnsureMigrate(WebApplication webApp)
+//{
+//    using var scope = webApp.Services.CreateScope();
+//    var context = scope.ServiceProvider.GetRequiredService<ArtworkSharingContext>();
+//    context.Database.Migrate();
+//}

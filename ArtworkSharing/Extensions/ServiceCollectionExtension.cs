@@ -65,9 +65,10 @@ namespace ArtworkSharing.Extensions
             services.AddValidatorsFromAssemblyContaining<UserToRegisterDTOValidator>();
 
 
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
             return services;
         }
-
 
         public static void AddConfigException(this IServiceCollection services)
         {

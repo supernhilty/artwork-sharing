@@ -1,17 +1,18 @@
 ﻿using ArtworkSharing.Core.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ArtworkSharing.DAL.Data
+namespace ArtworkSharing.Core
 {
-    public class ArtworkSharingContext : IdentityDbContext<User, Role, 
-        Guid, IdentityUserClaim<Guid>, UserRole, IdentityUserLogin<Guid>,
-        IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
+    internal class SampleNk: DbContext
     {
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<ArtistPackage> ArtistPackages { get; set; }
-        public DbSet<Artist> Artists { get; set; }        
+        public DbSet<Artist> Artists { get; set; }
         public DbSet<ArtworkService> ArtworkServices { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
@@ -21,41 +22,22 @@ namespace ArtworkSharing.DAL.Data
         public DbSet<Package> Packages { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<RefundRequest> RefundRequests { get; set; }
+        public DbSet<Role> Roles { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<User> Users { get; set; }
 
-        public ArtworkSharingContext()
-        {
-            
-        }
-        public ArtworkSharingContext(DbContextOptions options) : base(options)
+        public SampleNk()
         {
             
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        public SampleNk(DbContextOptions options) : base(options)
         {
-            if (!options.IsConfigured)
-            {
-                options.UseSqlServer("server =(local); database = ArtworkSharing;uid=sa;pwd=123456@Aa; TrustServerCertificate=True");
-            }
+
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<User>()
-                    .HasMany(u => u.UserRoles)
-                    .WithOne(r => r.User)
-                    .HasForeignKey(r => r.UserId)
-                    .IsRequired();
-
-            modelBuilder.Entity<Role>()
-                .HasMany(r => r.UserRoles)
-                .WithOne(u => u.Role)
-                .HasForeignKey(r => r.RoleId)
-                .IsRequired();
-
             modelBuilder.Entity<Follow>()
             .HasOne(f => f.Followed)
             .WithMany(u => u.Followers)
@@ -91,6 +73,7 @@ namespace ArtworkSharing.DAL.Data
               .WithMany(a => a.ArtistPackages)
               .HasForeignKey(a => a.ArtistId)
               .OnDelete(DeleteBehavior.NoAction);
-        } 
+
+        }
     }
 }

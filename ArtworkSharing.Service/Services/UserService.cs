@@ -8,6 +8,13 @@ using ArtworkSharing.Service.AutoMappings;
 
 using Microsoft.EntityFrameworkCore;
 
+﻿using System;
+using ArtworkSharing.Core.Domain.Entities;
+using ArtworkSharing.Core.Interfaces;
+using ArtworkSharing.Core.Interfaces.Services;
+using ArtworkSharing.Core.ViewModels.Users;
+using ArtworkSharing.DAL.Extensions;
+using ArtworkSharing.Service.AutoMappings;
 
 namespace ArtworkSharing.Service.Services
 {
@@ -19,19 +26,22 @@ namespace ArtworkSharing.Service.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task CreateNewUser(User user)
+        public async Task<UserViewModel> CreateNewUser(CreateUserModel user)
         {
             try
             {
                 await _unitOfWork.BeginTransaction();
                 var repo = _unitOfWork.UserRepository;
-                await repo.AddAsync(user);
-
+                var u = AutoMapperConfiguration.Mapper.Map<User>(user);
+                u.Id = Guid.NewGuid();
+                u.Status = true;
+                await repo.AddAsync(u);
                 await _unitOfWork.CommitTransaction();
+                return await GetUser(u.Id);
             }
             catch (Exception ex)
             {
-                _unitOfWork.RollbackTransaction();
+                await _unitOfWork.RollbackTransaction();
                 throw new Exception();
             }
         }
@@ -49,7 +59,8 @@ namespace ArtworkSharing.Service.Services
                 }
                 else
                 {
-                    await repo.DeleteAsync(user);
+                    user.Status = false;
+                    _unitOfWork.UserRepository.UpdateUser(user);
                     await _unitOfWork.CommitTransaction();
                 }
             }
@@ -60,33 +71,39 @@ namespace ArtworkSharing.Service.Services
             }
         }
 
+
+        public async Task<User> GetOne(Guid id)
+        {
+            return await _unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == id && u.Status);
+        }
+
         public async Task<UserViewModel> GetUser(Guid userId)
-            => AutoMapperConfiguration.Mapper.Map<UserViewModel>(
-                await _unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == userId));
+            => AutoMapperConfiguration.Mapper.Map<UserViewModel>(await _unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == userId && u.Status));
 
-        public async Task<IList<UserViewModel>> GetUsers()
-            => AutoMapperConfiguration.Mapper.Map<IList<UserViewModel>>(await (_unitOfWork.UserRepository.GetAll().AsQueryable()).ToListAsync());
+        public async Task<List<User>> GetUsers()
+        {
+            return (await _unitOfWork.UserRepository.GetAllAsync(x => x.Status)).ToList();
+        }
 
-    
-
-        public async Task UpdateUser(User user)
+        public async Task<UserViewModel> UpdateUser(Guid id, UpdateUserModel um)
         {
             try
             {
                 await _unitOfWork.BeginTransaction();
                 var repo = _unitOfWork.UserRepository;
-                var Uuser = await repo.FirstOrDefaultAsync(u => u.Id == user.Id);
-                if (Uuser == null)
+                var u = await repo.FirstOrDefaultAsync(u => u.Id == id);
+                if (u == null)
                 {
                     throw new KeyNotFoundException();
                 }
-                else
-                {
-                    Uuser = user;
+                u.Name = um.Name ?? u.Name;
+                u.Password = um.Password ?? u.Password;
+                u.Email = um.Email ?? u.Email;
+                u.Phone = um.Phone ?? u.Phone;
+                _unitOfWork.UserRepository.UpdateUser(u);
 
-
-                }
-
+                await _unitOfWork.CommitTransaction();
+                return await GetUser(id);
             }
             catch (Exception ex)
             {
