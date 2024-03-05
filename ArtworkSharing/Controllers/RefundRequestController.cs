@@ -10,7 +10,6 @@ using ArtworkSharing.Core.Interfaces.Services;
 using ArtworkSharing.Core.ViewModels.RefundRequests;
 using ArtworkSharing.Service.AutoMappings;
 using Microsoft.AspNetCore.Mvc;
-namespace ArtworkSharing.Controllers;
 
 namespace ArtworkSharing.Controllers
 {

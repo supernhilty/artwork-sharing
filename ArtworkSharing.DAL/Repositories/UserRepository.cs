@@ -18,5 +18,10 @@ namespace ArtworkSharing.DAL.Repositories
         {
             _context.Update(u);
         }
+
+        public void UpdateUser(User u)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
