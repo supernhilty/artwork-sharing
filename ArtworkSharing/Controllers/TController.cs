@@ -95,7 +95,7 @@ namespace ArtworkSharing.Controllers
                 {
                     return NotFound();
                 }
-
+                
                 await _ArtworkService.Delete(artworkId);
 
                 return NoContent();

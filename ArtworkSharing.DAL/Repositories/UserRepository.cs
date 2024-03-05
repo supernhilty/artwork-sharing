@@ -9,5 +9,10 @@ namespace ArtworkSharing.DAL.Repositories
         public UserRepository(DbContext dbContext) : base(dbContext)
         {
         }
+
+        public void UpdateUser(User u)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
