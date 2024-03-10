@@ -1,6 +1,8 @@
+using ArtworkSharing.Controllers;
 using ArtworkSharing.DAL.Data;
 using ArtworkSharing.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
     options.ResolveConflictingActions(apiDescriptions => apiDescriptions.OrderBy(action => action.RelativePath).First());
 });
 
@@ -23,6 +26,10 @@ builder.Services.AddDbContext<ArtworkSharingContext>(options => options.UseSqlSe
 builder.Services.AddDatabase();
 builder.Services.AddServices();
 builder.Services.AddConfigException();
+builder.Services.AddHttpClient();
+
+// Đăng ký WatermarkController
+builder.Services.AddTransient<WatermarkController>();
 var app = builder.Build();
 EnsureMigrate(app);
 // Configure the HTTP request pipeline.
