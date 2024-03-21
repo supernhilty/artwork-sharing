@@ -4,6 +4,7 @@ using ArtworkSharing.Controllers;
 using ArtworkSharing.DAL.Data;
 using ArtworkSharing.Exceptions;
 using ArtworkSharing.Extensions;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,13 +14,12 @@ var ArtworkSharing = "ArtworkSharing";
 
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-builder.Services.AddSession();
+
 builder.Services.AddIdentityServices(builder.Configuration);
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
- 
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -37,8 +37,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     // Cookie settings
     options.Cookie.HttpOnly = true;
     options.Cookie.Expiration = TimeSpan.FromDays(7);
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; 
     options.Cookie.SameSite = SameSiteMode.None;
     options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
     options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
@@ -51,26 +50,32 @@ builder.Services.AddMvc(options => { options.SuppressAsyncSuffixInActionNames = 
 builder.Services.AddHttpClient();
 
 // Configure CORS to allow any origin
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 //builder.Services.AddCors(options =>
 //{
-//    options.AddPolicy("AllowAll", policy =>
-//    {
-//        policy.AllowAnyOrigin()
-//              .AllowAnyMethod()
-//              .AllowAnyHeader();
-//    });
+//    options.AddPolicy(name: ArtworkSharing,
+//                      policy =>
+//                      {
+//                          policy.WithOrigins("http://127.0.0.1:5500/",
+//                                              "https://127.0.0.1:5500/").AllowAnyMethod().AllowAnyHeader();
+//                      });
 //});
-
-
 // Đăng ký WatermarkController
 builder.Services.AddTransient<WatermarkController>();
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
-builder.Services.AddAuthorization();
 var app = builder.Build();
-app.UseSession();
 app.UseCors(builder => builder
     .AllowAnyOrigin()  
     .AllowAnyMethod()   
@@ -89,20 +94,19 @@ if (app.Environment.IsDevelopment())
 
 
 
-
+app.UseCors(_ => _.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseException();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-//app.UseCors("AllowAll");
+app.UseCors("AllowAll");
 app.Run();
 
 void EnsureMigrate(WebApplication webApp)
 {
-
-   using var scope = webApp.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<ArtworkSharingContext>();
-   context.Database.Migrate();
+    //using var scope = webApp.Services.CreateScope();
+    //var context = scope.ServiceProvider.GetRequiredService<ArtworkSharingContext>();
+    //context.Database.Migrate();
 }

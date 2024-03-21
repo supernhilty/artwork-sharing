@@ -13,6 +13,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ArtworkService = ArtworkSharing.Service.Services.ArtworkService;
 
@@ -71,7 +72,6 @@ public static class ServiceCollectionExtension
         services.AddScoped<IPaymentMethodService, PaymentMethodService>();
         services.AddScoped<IPaypalRefundEventService, PaypalRefundEventService>();
 
-
         services.AddTransient<IEmailSender, EmailSender>();
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<UserToLoginDTOValidator>();
@@ -88,7 +88,9 @@ public static class ServiceCollectionExtension
         services.AddHostedService<MessagePaymentEvent>(_ => _.GetService<MessagePaymentEvent>()!);
         services.AddHostedService<MessageRefundEvent>(_ => _.GetService<MessageRefundEvent>()!);
         services.AddHostedService<MessageSubscribe>();
+        services.AddHostedService<MessagePaypalSubscribe>();
         services.AddHostedService<MessageRefundSubscribe>();
+        services.AddHostedService<MessagePaypalSubscribe>();
         return services;
     }
 
@@ -127,8 +129,10 @@ public static class ServiceCollectionExtension
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddCookie(x =>
         {
-            x.Cookie.Name = "token";
-        }).AddJwtBearer(options =>
+            x.Cookie.Name = "accessToken";
+        }
+            )
+            .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = true;
                 options.SaveToken = true;
@@ -144,7 +148,7 @@ public static class ServiceCollectionExtension
                 {
                     OnMessageReceived = context =>
                     {
-                        context.Token = context.Request.Cookies["token"];
+                        var accessToken = context.Request.Cookies["accessToken"];
 
                         return Task.CompletedTask;
                     }
@@ -154,11 +158,11 @@ public static class ServiceCollectionExtension
             ;
         services.AddAuthentication().AddGoogle(options =>
         {
-            
+
             // You can set other options as needed.
         });
-        
-        
+
+
         //services.AddAuthorization(opt =>
         //{
         //    opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
@@ -166,6 +170,4 @@ public static class ServiceCollectionExtension
         //});
         return services;
     }
-
-    
 }

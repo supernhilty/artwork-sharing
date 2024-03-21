@@ -15,9 +15,8 @@ public class FollowController : ControllerBase
     }
 
     [HttpPost("follow")]
-    public async Task<IActionResult> FollowCreator(Guid followUserId)
+    public async Task<IActionResult> FollowCreator(Guid currentUserId, Guid followUserId)
     {
-        Guid currentUserId = Guid.Empty;
         if (string.IsNullOrEmpty(currentUserId.ToString()) || string.IsNullOrEmpty(followUserId.ToString()))
             return BadRequest();
         if (currentUserId == followUserId)
@@ -32,9 +31,8 @@ public class FollowController : ControllerBase
     }
 
     [HttpPost("unfollow")]
-    public async Task<IActionResult> UnFollowCreator(Guid followUserId)
+    public async Task<IActionResult> UnFollowCreator(Guid currentUserId, Guid followUserId)
     {
-        Guid currentUserId = Guid.Empty;
         if (string.IsNullOrEmpty(currentUserId.ToString()) || string.IsNullOrEmpty(followUserId.ToString()))
             return BadRequest();
 
@@ -48,16 +46,4 @@ public class FollowController : ControllerBase
 
         return Ok();
     }
-
-    [HttpGet("isFollowed")]
-    public async Task<IActionResult> IsFollowed(Guid followUserId)
-    {
-        Guid currentUserId = Guid.Empty;
-        if (string.IsNullOrEmpty(currentUserId.ToString()) || string.IsNullOrEmpty(followUserId.ToString()))
-            return BadRequest();
-
-        var isFollowed = await _followService.IsFollowing(currentUserId, followUserId);
-
-        return Ok(isFollowed);
-    }   
 }

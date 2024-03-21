@@ -14,7 +14,6 @@ public class TransactionsViewModelUser
     public DateTime CreatedDate { get; set; }
     public TransactionStatus Status { get; set; }
     public TransactionType Type { get; set; }
-    public PaymentMethod PaymentMethod { get; set; }
 
     public Domain.Entities.User Audience { get; set; }
     public Artwork? Artwork { get; set; }
