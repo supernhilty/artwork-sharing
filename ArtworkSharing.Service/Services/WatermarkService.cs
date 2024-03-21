@@ -1,4 +1,10 @@
-﻿using ArtworkSharing.Core.Interfaces.Services;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using ArtworkSharing.Core.Interfaces.Services;
+using ArtworkSharing.Core.Models;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace ArtworkSharing.Service.Services
 {

@@ -1,13 +1,12 @@
 
 $(document).ready(function() {
     // Initialize DataTable
-    
     $('#transactionTable').DataTable();
 
     // Function to fetch data from API and populate the table
     function fetchData() {
         $.ajax({
-            url: 'https://localhost:7270/api/Transaction/userTransactions/56a3e149-2c89-4d85-5ac9-08dc4956f46d',
+            url: 'https://localhost:7270/api/Transaction/userTransactions/32fddca3-6ebf-43c8-87ac-a6948626e2dc',
             type: 'GET',
             success: function(response) {
                 console.log(response);
@@ -65,9 +64,8 @@ $(document).ready(function () {
         })
         
             $(document).on('click', '#requestbutton', function () {
-                event.preventDefault(); // Prevent the default form submission behavior
                 createRefundRequest(id); // Call the createRefundRequest function
-                // $('#myModal').modal('hide'); // Hide the modal
+                $('#myModal').modal('hide'); // Hide the modal
             });
     });
     
@@ -77,40 +75,57 @@ $(document).ready(function () {
         var refundReason = document.getElementById("refundReason").value;
         var transactionId = id;
         
-        if(refundDescription.trim() === ""){
-            showWarning("You must input Description!");
-        }else if(refundReason.trim() === ""){
-            showWarning("You must input the Reason!")
-        }else{
-            var data = {
-                transactionId : transactionId,
-                description : refundDescription,
-                reason : refundReason
-            }
-
-            $.ajax({
-                url : "https://localhost:7270/RefundRequest/createRefundRequestUser/",
-                method : "POST",
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                success: function (response) {
-                    console.log('Created Refund', response.id)
-                    $('#myModal').modal('hide');
-                    showSuccess("Your refund request has been created!");
-                    setTimeout(function() {
-                        window.location.href = "RefundRequestListUser.html";
-                    }, 3000);
-
-                },
-                error: function (err) {
-                    console.log('Can not create refund request', err);
-                    showError("Something is wrong. Please try again!");
-                }
-            })
+        var data = {
+            transactionId : transactionId,
+            description : refundDescription,
+            reason : refundReason
         }
+        
+        $.ajax({
+            url : "https://localhost:7270/RefundRequest/createRefundRequestUser/",
+            method : "POST",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                console.log('Created Refund', response.id)
+                $('#myModal').modal('hide');
+                showSuccess("Your refund request has been created!");
+
+            },
+            error: function (err) {
+                console.log('Can not create refund request', err);
+                showError("Something is wrong. Please try again!");
+            }
+        })
+        
+        
+        
     }
 });
 
+
+function showSuccess(){
+    var successToast = document.querySelector('.toast.success');
+    var loadingBar1 = successToast.querySelector('.loadingSucces');
+    successToast.style.opacity = '1';
+    loadingBar1.classList.add('active');
+
+    setTimeout(function () {
+        loadingBar1.classList.remove('active');
+        successToast.style.opacity = "0";
+    }, 2500);
+}
+function showWarning(){
+    var warningToast = document.querySelector('.toast.warning');
+    var loadingBar1 = warningToast.querySelector('.loadingWarning');
+    warningToast.style.opacity = '1';
+    loadingBar1.classList.add('active');
+
+    setTimeout(function () {
+        loadingBar1.classList.remove('active');
+        warningToast.style.opacity = "0";
+    }, 2500);
+}
 
 function showError(message) {
     var errorToast = document.querySelector('.toast.error');
@@ -125,35 +140,6 @@ function showError(message) {
     setTimeout(function() {
         loadingBar1.classList.remove('active');
         errorToast.style.opacity = '0';
-    }, 2500);
-}
-
-function showSuccess(message){
-    var successToast = document.querySelector('.toast.success');
-    var loadingBar1 = successToast.querySelector('.loadingSucces');
-    var successText = successToast.querySelector('.container-2Text p:last-child');
-
-    successText.textContent = message;
-    successToast.style.opacity = '1';
-    loadingBar1.classList.add('active');
-
-    setTimeout(function () {
-        loadingBar1.classList.remove('active');
-        successToast.style.opacity = "0";
-    }, 2500);
-}
-function showWarning(message){
-    var warningToast = document.querySelector('.toast.warning');
-    var loadingBar1 = warningToast.querySelector('.loadingWarning');
-    var warningText = warningToast.querySelector('.container-2Text p:last-child');
-
-    warningText.textContent = message;
-    warningToast.style.opacity = '1';
-    loadingBar1.classList.add('active');
-
-    setTimeout(function () {
-        loadingBar1.classList.remove('active');
-        warningToast.style.opacity = "0";
     }, 2500);
 }
 
