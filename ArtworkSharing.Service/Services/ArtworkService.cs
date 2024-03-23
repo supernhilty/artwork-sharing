@@ -71,7 +71,8 @@ public class ArtworkService : IArtworkService
         return await _unitOfWork.ArtworkRepository.Include(x => x.Likes)
             .Include(x => x.Comments).ThenInclude(x => x.CommentedUser)!
             .Include(x => x.Artist)
-            .ThenInclude(x => x.User).FirstOrDefaultAsync(x => x.Id == artworkId);
+            .ThenInclude(x => x.User)
+            .Include(x => x.MediaContents).FirstOrDefaultAsync(x => x.Id == artworkId);
     }
 
     public async Task Update(Artwork artwork)

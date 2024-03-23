@@ -225,8 +225,7 @@ public class RefundRequestController : ControllerBase
 
             Guid ArtistId = Artists.Id;
             // Sử dụng phương thức Join để kết nối các bảng
-            Expression<Func<Transaction, bool>> filtert = t => t.Artwork.ArtistId == ArtistId;
-        
+            Expression<Func<Transaction, bool>> filtert = t => (t.Artwork.ArtistId == ArtistId || t.ArtworkService.ArtistId== ArtistId);        
 
             // Khởi tạo hàm sắp xếp giảm dần theo thời gian
             Func<IQueryable<Transaction>, IOrderedQueryable<Transaction>> orderByt = q => q.OrderByDescending(p => p.CreatedDate);

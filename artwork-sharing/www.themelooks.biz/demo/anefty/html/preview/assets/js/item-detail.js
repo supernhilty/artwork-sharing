@@ -28,6 +28,11 @@ window.onload = async function LoadItemDetail() {
         document.getElementById('btnPayment').innerHTML = ` <button  onclick="Payment('${pTxt.id}')" class="btn btn-border btn-sm"><img
         src="assets/img/icons/btn-buy-now-icon.svg" alt="" class="svg"> Buy Now</button>`
 
+        for (let index = 0; index < 2; index++) {
+            console.log("G" + pTxt.mediaContents[index].media)
+            document.getElementById('imgartwork').innerHTML = `<img src="${pTxt.mediaContents[index].media}" alt="">`
+        }
+   
         await GetUser();
         await CheckLike(artworkId);
         await GetComments(artworkId);

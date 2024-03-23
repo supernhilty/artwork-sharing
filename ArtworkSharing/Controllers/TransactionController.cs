@@ -112,14 +112,13 @@ public class TransactionController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateTransactionArtwork(TransactionArtworkModel transactionArtworkModel)
     {
-        //var idRaw = HttpContext.Items["UserId"];
-        //if (idRaw == null) return Unauthorized();
+        var idRaw = HttpContext.Items["UserId"];
+        if (idRaw == null) return Unauthorized();
 
-        //Guid uid = Guid.Parse(idRaw + "");
+        Guid uid = Guid.Parse(idRaw + "");
 
-        //if (uid == Guid.Empty) return Unauthorized();
+        if (uid == Guid.Empty) return Unauthorized();
 
-        var uid = Guid.Parse("48485956-80A9-42AB-F8C2-08DC44567C01");
         var artwork = await _artworkService.GetArtwork(transactionArtworkModel.ArtworkId);
 
         if (artwork == null) return BadRequest(new { Message = "Not found artwork" });

@@ -38,7 +38,9 @@ async function LoadArtwork() {
             </div>
         </div>
     </div>`;
+        console.log(pTxt)
         pTxt.forEach(element => {
+            console.log(element)
             document.getElementById('artworkitem').innerHTML += `   <div class="col-lg-4 col-md-6">
             <div class="single-product mb-30"><img src="assets/img/product/product4.png" alt="">
                 <div class="product-content">
@@ -51,7 +53,7 @@ async function LoadArtwork() {
                     <div class="product-bottom">
                         <div class="button-group">
                            <a href="item-details.html?id=${element.id}" class="btn btn-border btn-sm"><img
-                                    src="assets/img/icons/judge-icon.svg" alt="" class="svg">Details</a>
+                                    src="${element.mediaContents[0].media}" alt="" class="svg">Details</a>
                         </div>
                     </div>
                 </div>
