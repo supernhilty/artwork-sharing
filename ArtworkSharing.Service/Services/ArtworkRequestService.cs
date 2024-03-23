@@ -161,7 +161,8 @@ public class ArtworkRequestService : IArtworkRequestService
             .ArtworkServiceRepository
             .Include(r => r.Artist)
                     .ThenInclude(r => r.User)
-            .Where(r => r.AudienceId == artistId)
+            .Include(r => r.Audience)
+            .Where(r => r.Artist.User.Id == artistId)
             .OrderByDescending(r => r.RequestedDate)
             .ToListAsync());
     }
